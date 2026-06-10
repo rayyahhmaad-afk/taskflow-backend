@@ -4,19 +4,11 @@ async function register(req, res) {
   try {
     const user = await authService.register(req.body);
 
-    // Hapus password dari response untuk keamanan
-    const userResponse = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
+    const { password, ...safeUser } = user;
 
     return res.status(201).json({
       success: true,
-      data: userResponse,
+      data: safeUser,
     });
   } catch (error) {
     return res.status(400).json({
@@ -26,6 +18,32 @@ async function register(req, res) {
   }
 }
 
+async function login(req, res) {
+  try {
+    const result = await authService.login(req.body);
+
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+async function profile(req, res) {
+  return res.status(200).json({
+    success: true,
+    user: req.user,
+  });
+}
+
+
 module.exports = {
   register,
+  login,
+  profile,
 };
