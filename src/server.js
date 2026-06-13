@@ -4,6 +4,7 @@ const helmet = require("helmet");
 require("dotenv").config();
 
 const authRoutes = require("./modules/auth/auth.routes");
+const projectRoutes = require("./modules/project/project.routes");
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(helmet());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/projects", projectRoutes);
 
 app.get("/", (req, res) => {
   res.json({
